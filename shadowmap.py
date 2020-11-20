@@ -1,4 +1,7 @@
 #!/usr/bin/python
+from __future__ import print_function
+from __future__ import division
+from past.utils import old_div
 from heightmap import Map
 from PIL import Image
 import numpy
@@ -13,7 +16,7 @@ except ImportError:
 
 def update_progress(progress):
     progress = int(progress * 100)
-    print '\r[{0:<10}] {1}%'.format('='*(progress/10), progress),
+    print('\r[{0:<10}] {1}%'.format('='*(old_div(progress,10)), progress), end=' ')
     stdout.flush()
 
 class ShadowMap(Map):
@@ -32,8 +35,8 @@ class ShadowMap(Map):
             return c_shadowmap.calculate(self.heightmap.heights, self.sun_x, self.sun_y, self.sun_z, self.view_alt, self.max_height)
         else:
             shadowmap = numpy.zeros((self.size, self.size), dtype=int)
-            for y in xrange(0, self.size):
-                for x in xrange(0, self.size):
+            for y in range(0, self.size):
+                for x in range(0, self.size):
                     shadowmap[(y, x)] = 1 if self.is_lit(x, y) else 0
 
             return shadowmap
@@ -47,7 +50,7 @@ class ShadowMap(Map):
         x1 = x0 + self.sun_x * self.size
         y1 = y0 + self.sun_y * self.size
         z = self.heightmap.heights[y0, x0] + self.view_alt
-        zv = self.sun_z / sqrt(self.sun_x * self.sun_x + self.sun_y * self.sun_y)
+        zv = old_div(self.sun_z, sqrt(self.sun_x * self.sun_x + self.sun_y * self.sun_y))
 
         # Following is a Bresenham's algorithm line tracing.
         # This avoids performing lots of float calculations in
@@ -66,7 +69,7 @@ class ShadowMap(Map):
 
         deltax = abs(x1 - x0)
         deltay = abs(y1 - y0)
-        error = -deltax / 2
+        error = old_div(-deltax, 2)
         y = y0
 
         xdir = 1 if x0 < x1 else -1

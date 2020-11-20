@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+from __future__ import print_function
 from datetime import datetime, timedelta
 from heightmap import HeightMap
 from suncalc import solar_position
@@ -34,7 +35,7 @@ if args.background_map:
 
 t = t1
 while t <= t2:
-    print t.strftime('%Y-%m-%d_%H%M.png'), '...'
+    print(t.strftime('%Y-%m-%d_%H%M.png'), '...')
     sunpos = solar_position(t, hm.lat, hm.lng)
     dev = get_projection_north_deviation(hm.proj, hm.lat, hm.lng)
     sun_x = -sin(sunpos['azimuth'] - dev) * cos(sunpos['altitude'])
@@ -57,4 +58,4 @@ while t <= t2:
     img.save(path.join(args.output_directory, t.strftime('%Y-%m-%d_%H%M.png')))
 
     t += delta
-    print
+    print()

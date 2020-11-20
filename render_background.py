@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import mapnik
 
-class MapRenderer:
+class MapRenderer():
     def __init__(self, size, stylesheet):
         self._map = mapnik.Map(size, size)
         mapnik.load_map(self._map, stylesheet)

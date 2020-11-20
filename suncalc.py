@@ -2,7 +2,9 @@
 
 """Solar position calculations, adapted from Suncalc, a JS lib
 by Vladimir Agafonkin (https://github.com/mourner/suncalc)"""
+from __future__ import division
 
+from past.utils import old_div
 from math import sin, cos, tan, asin, atan2, pi
 from datetime import datetime
 
@@ -17,7 +19,7 @@ def toMillis(date):
     return (date - epochStart).total_seconds() * 1000
 
 def toJulian(date):
-    return toMillis(date) / dayMs - 0.5 + J1970
+    return old_div(toMillis(date), dayMs) - 0.5 + J1970
 
 def toDays(date):
     return toJulian(date) - J2000
