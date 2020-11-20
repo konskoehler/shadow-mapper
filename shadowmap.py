@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from __future__ import print_function
 from heightmap import Map
 from PIL import Image
 import numpy
@@ -13,7 +14,7 @@ except ImportError:
 
 def update_progress(progress):
     progress = int(progress * 100)
-    print '\r[{0:<10}] {1}%'.format('='*(progress/10), progress),
+    print('\r[{0:<10}] {1}%'.format('='*(progress/10), progress), end=' ')
     stdout.flush()
 
 class ShadowMap(Map):

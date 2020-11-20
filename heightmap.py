@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from __future__ import print_function
 from os import path
 from pyproj import Proj
 import numpy
@@ -25,7 +26,7 @@ class OSMHeightMap(HeightMap):
         draw = ImageDraw.Draw(img)
         fc = json.load(f)
         for f in fc['features']:
-            h = float(f['properties']['height']) if f['properties'].has_key('height') else 10
+            h = float(f['properties']['height']) if 'height' in f['properties'] else 10
             coords = map(lambda ll: self._latLngToIndex(ll[1], ll[0]), f['geometry']['coordinates'][0])
             draw.polygon(coords, fill=h)
 
@@ -37,16 +38,16 @@ class SrtmHeightMap(HeightMap):
 
         tiles = {}
 
-        for y in xrange(0, size):
+        for y in range(size):
             cy = self.bounds[1] + y / float(size) * self.psize
-            for x in xrange(0, size):
+            for x in range(size):
                 cx = self.bounds[0] + x / float(size) * self.psize
                 lng, lat = proj(cx, cy, inverse=True)
 
                 tile_key = SrtmHeightMap._tileKey(lat, lng)
-                if not tiles.has_key(tile_key):
+                if tile_key not in tiles:
                     tiles[tile_key] = SrtmHeightMap._loadTile(data_dir, lat, lng)
-                    print 'Loaded tile', tile_key
+                    print('Loaded tile', tile_key)
 
                 v = tiles[tile_key].getAltitudeFromLatLon(lat, lng)
                 self.heights[y,x] = v
