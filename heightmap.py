@@ -7,6 +7,7 @@ from srtm import VTPTile
 from PIL import Image, ImageDraw
 import json
 from map import Map
+from tqdm import tqdm
 
 class HeightMap(Map):
     def __init__(self, lat, lng, resolution, size, proj):
@@ -25,9 +26,11 @@ class OSMHeightMap(HeightMap):
         img = Image.new('F', (size, size))
         draw = ImageDraw.Draw(img)
         fc = json.load(f)
-        for f in fc['features']:
-            h = float(f['properties']['height']) if 'height' in f['properties'] else 10
-            coords = map(lambda ll: self._latLngToIndex(ll[1], ll[0]), f['geometry']['coordinates'][0])
+        for f in tqdm(fc['features']):
+            h = float(f['properties']['height']) if f['properties']['height'] != 0 else 10
+            if type(f["geometry"]["coordinates"][0][0][0]) == list:
+                continue
+            coords = [self._latLngToIndex(ll[1], ll[0]) for ll in f['geometry']['coordinates'][0]]
             draw.polygon(coords, fill=h)
 
         self.heights = numpy.array(img)
