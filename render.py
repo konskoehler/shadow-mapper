@@ -43,6 +43,8 @@ while t <= t2:
     sun_z = sin(sunpos['altitude'])
 
     sm = ShadowMap(hm.lat, hm.lng, hm.resolution, hm.size, hm.proj, sun_x, sun_y, sun_z, hm, 1.5)
+    a = sm.to_latlng()
+
     img = sm.to_image()
     img = img.convert('RGB')
 

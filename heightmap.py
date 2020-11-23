@@ -88,7 +88,7 @@ if __name__ == '__main__':
     resolution = float(args.resolution)
     size = int(args.size)
 
-    proj = Proj(init=args.projection)
+    proj = Proj(args.projection)
 
     elev = SrtmHeightMap(lat, lng, resolution, size, proj, args.elevation_dir)
     with open(args.geojson, 'r') as f:
